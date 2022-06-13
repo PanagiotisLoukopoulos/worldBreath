@@ -1,0 +1,57 @@
+<%- include("partials/header") %>
+
+
+
+<!-- New System -->
+<section class="grid" id="newSystem">
+
+    <div class="gridLeft">
+
+        <div class="system">
+            <h1 id="footprint"> Your Environmetal Footprint</h1>
+            <!-- <h4 class="system-elem-left">Select period: </h4> -->
+            <div class="system-elem-left">
+                <form action="/footprint" method="post">
+                    <label for="period"><h4>Choose period:</h4></label>
+                    <select name="period" id="months">
+                    <option value="jan-apr">Jan - Apr</option>
+                    <option value="may-aug">May - Aug</option>
+                    <option value="sep-dec">Sep - Dec</option>
+                    </select>
+                    <br><br>
+                    <label for="electricity"><h4>Insert Electricity consumpsion (kwh):</h4></label>
+                    <input class="electricity-input" type="number" id="electricit" name="electricity" autofocus required><br>
+                    <button class="footprint-btn btn btn-outline-success btn-md" type="submit">Submit</button>
+
+                </form>
+            </div>
+            <br>
+        </div>
+
+        <div class="row totalFootprint">
+
+            <div class="new-system-column col-lg-6 col-md-6">
+                <!-- outdoor system  -->
+                <div class="card">
+                    <div class="card-header">
+                    <h2>Total Footprint</h2>
+                    </div>
+                    <div class="card-body">
+                        <h5>For period <%=periodOfConsumption %> you produced <%= totalEmissions %>   ppm of CO2</h5> <!--na emfanizei ena prasino fullo an einai ok! -->
+                        
+                    </div>
+                    <div class="d-grid gap-2 d-sm-block">
+                        <a href="total_info.html"><button class="set-alarm-btn btn btn-outline-success btn-md" type="button">more info</button></a>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+
+    <iframe class="graphEmissions" src="https://ourworldindata.org/grapher/annual-co2-emissions-per-country?time=1750..1967&country=~GRC" loading="lazy" style="width: 40%; height: 600px; border: 10px none;"></iframe>
+</section>
+
+<%- include("partials/footer") %> 

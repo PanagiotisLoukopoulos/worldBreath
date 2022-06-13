@@ -1,0 +1,67 @@
+
+<%- include("partials/header") %>
+
+
+
+<!-- New System -->
+<section id="newSystem">
+    <div class="AqiWidget">
+        <div  name="airvisual_widget" key="629246ccb23571630005e1b8"></div>
+        <script type="text/javascript" src="https://widget.iqair.com/script/widget_v3.0.js"></script>
+    </div>
+
+    <div class="system">
+        <h1>Panagiotis Home AQS</h1>
+    </div>
+
+
+    <div class="row">
+
+        <div class="new-system-column col-lg-6 col-md-6">
+             <!-- indoor system  -->
+            <div class="card">
+                <div class="card-header">
+                <h2>Indoor System</h2>
+                </div>
+                <div class="card-body">
+                <h3>Status: Healthy</h3>
+                <p>Temperature: <span><%= temp %> </span> </p>
+                <p>Humidity: <span></span></p>
+                <p class="invisible">invisible text</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="new-system-column col-lg-6 col-md-6">
+            <!-- outdoor system  -->
+            <div class="card">
+                <div class="card-header">
+                <h2>Outdoor System</h2>
+                </div>
+                <div class="card-body">
+                    <h3>Status: Healthy</h3>  <!--isws valw to status na vgainei me vash to AQI kai to AQI na fygei -->
+                    <p>AQI : </p>
+                    <p>Temp: <span></span> </p>
+                    <p>Hum : <span></span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div>
+            <a class="set-alarm-btn btn btn-primary btn-lg" href="#" role="button">Set alarm</a>
+        </div> -->
+
+        <!-- <div class="d-grid gap-2 d-sm-block">
+            <button class="set-alarm-btn btn btn-outline-success btn-lg" type="button">Set alarm</button>
+        </div> -->
+
+            <div class="d-grid gap-2 d-sm-block">
+                <a href="/home/setAlarm"><button class="set-alarm-btn btn btn-outline-success btn-lg" type="button">Set alarm</button></a>
+            </div>
+
+    </div> 
+
+</section>
+
+
+<%- include("partials/footer") %> 

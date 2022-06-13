@@ -1,0 +1,164 @@
+body {margin:0;}
+
+.icon-bar {
+  width: 100%;
+  background-color: #555;
+  overflow: auto;
+}
+
+.icon-bar a {
+  float: left;
+  width: 20%;
+  text-align: center;
+  padding: 12px 0;
+  transition: all 0.3s ease;
+  color: white;
+  font-size: 36px;
+}
+
+.icon-bar a:hover {
+  background-color: #000;
+}
+
+.active {
+  background-color: #04AA6D;
+}
+
+/* logo worldbreath */
+.my-logo{
+	font-size: x-large;
+  background-color: white;
+  color: black;
+  padding-left: 1em;
+}
+
+/* fixed-top icon bar */
+.nav-section {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  overflow: hidden;
+  background-color: #000;
+  z-index: 1;
+}
+
+.system{
+  
+  margin-top: 30px;
+  
+}
+
+
+
+/* system Section */
+
+#pricing {
+  padding: 100px;
+}
+
+.pricing-col{
+  padding: 3% 2%;
+}
+
+.price-text{
+font-size: 3rem;
+line-height: 1.5;
+font-weight: bold;
+}
+
+.pricing-title{
+font-size: 1.5rem;
+}
+
+#newSystem{
+  padding: 100px;
+  text-align: center;
+}
+
+.new-system-column{
+  padding: 3% 2%;
+}
+
+.set-alarm-btn{
+  margin-top: 10px;
+} 
+
+/* left align class */
+
+.system-elem-left{
+  text-align: left;
+}
+
+/* add alarm page */
+
+.alarm-inputs{
+  width: 40px;
+}
+
+/* total co2 section */
+.electricity-input{
+  width: 80px;
+}
+
+#footprint{
+  text-align: left;
+  margin-top: 0rem;
+  margin-bottom: 2rem;
+}
+
+.totalFootprint{
+  width:fit-content;
+}
+
+
+/* graphs from  https://ourworldindata.org/co2/country/greece  */
+.graphEmissions{
+  padding-top: 10rem;
+  margin-left: 70rem;  
+}
+
+
+
+.AqiWidget{
+  padding-top: 5rem;
+  padding-left: 90rem;
+
+}
+
+
+/* total  */
+
+.grid{
+  display: grid;
+  grid-template-areas: "pa pa";
+}
+
+.gridLeft{
+  grid-area: pa;
+}
+
+.graphEmissions{
+  grid-area: pa;
+}
+
+
+
+/* home */
+
+
+@media screen and (max-width: 1360px) {
+  .AqiWidget {
+    display: none;
+  }
+  .graphEmissions{
+    display: none;
+  }
+}
+
+
+/* dashboards section */
+
+.eco2{
+  padding-top: 20rem;
+  padding-left: 10rem;
+}

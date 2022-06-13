@@ -1,0 +1,56 @@
+<%- include("partials/header") %>
+
+
+<!-- New System -->
+<section id="newSystem">
+    <div class="system">
+        <h1>Indoor Sensors - Outdoor Sensors</h1>
+    </div>
+
+    <div class="row">
+
+        <div class="new-system-column col-lg-6 col-md-6">
+             <!-- indoor system  -->
+            <div class="card">
+                <div class="card-header">
+                <h2>Indoor Alarm</h2>
+                </div>
+                <div class="card-body">
+                <h3>CO2 : <span><input class="alarm-inputs" type="text"></span></h3> 
+                <h3>VOC : <span><input class="alarm-inputs" type="text"></span></h3>
+                <h3>Hum : <span><input class="alarm-inputs" type="text"></span></h3>
+                <h3>Temp: <span><input class="alarm-inputs" type="text"></span></h3>
+                <!-- <p class="invisible">invisible text</p> -->
+                </div>
+            </div>
+        </div>
+
+        <div class="new-system-column col-lg-6 col-md-6">
+            <!-- outdoor system  -->
+            <div class="card">
+                <div class="card-header">
+                <h2>Outdoor Alarm</h2>
+                </div>
+                <div class="card-body">
+                    <h3>CO2 : <span><input class="alarm-inputs" type="text"></span></h3>  <!--isws valw to status na vgainei me vash to AQI kai to AQI na fygei -->
+                    <h3>AQI : <span><input class="alarm-inputs" type="text"></span></h3>
+                    <h3>VOC : <span><input class="alarm-inputs" type="text"></span></h3>
+                    <h3>Temp: <span><input class="alarm-inputs" type="text"></span></h3>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div>
+            <a class="set-alarm-btn btn btn-primary btn-lg" href="#" role="button">Set alarm</a>
+        </div> -->
+
+        <div class="d-grid gap-2 d-sm-block">
+            <button class="set-alarm-btn btn btn-outline-success btn-lg" type="button">Add alarm</button>
+        </div>
+
+    </div>
+        
+    
+</section>
+
+<%- include("partials/footer") %> 
