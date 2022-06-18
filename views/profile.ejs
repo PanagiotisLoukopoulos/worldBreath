@@ -8,9 +8,70 @@
     <iframe style="background: #21313C;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="640" height="480" src="https://charts.mongodb.com/charts-project-0-cpnpy/embed/charts?id=6298e6dc-0603-4de6-85ff-f47b0e7a5d8e&maxDataAge=10&theme=dark&autoRefresh=true"></iframe>
 </div> -->
 
-<!-- chart example -->
+<!-- New System -->
+<section id="newSystem">
+    <div class="system">
+        <h1>Indoor Sensors</h1>
+    </div>
 
- 
+    <div class="row">
+
+        <div class="new-system-column col-lg-6 col-md-6">
+             <!-- indoor system  -->
+            <div class="card">
+                <div class="card-header">
+                <h2>Living room</h2>
+                </div>
+                <div class="card-body">
+                <h3>CO2 : <span><%= eco2_sgp30 %></span> ppm</h3>  
+                <h3>VOC : <span><%= tvoc_sgp30 %></span> ppb</h3>
+                <h3>Hum : <span><%= humidity_bme688 %></span> %</h3>
+                <h3>Temp: <span><%= temperature_bme688 %></span> °C</h3>
+                <!-- <p class="invisible">invisible text</p> -->
+                </div>
+            </div>
+        </div>
+
+    </div>
+        
+</section>
+<!-- New System -->
+<section class="grid" id="newSystem">
+
+    <div class="gridLeft">
+
+        <div class="system">
+            <h1> Outdoor Sensors</h1>
+        </div>
+    
+        <div class="row">
+    
+            <div class="new-system-column col-lg-6 col-md-6">
+                <!-- outdoor system  -->
+                <div class="card">
+                    <div class="card-header">
+                    <h2>Fireplace</h2>
+                    </div>
+                    <div class="card-body">
+                        <h3>CO2 : <span><span><%= eCO2_ccs811 %></span> ppm</h3>  
+                        <h3>VOC : <span><span><%= TVOC_ccs811 %></span> ppb</h3>
+                        <!-- <h3>AQI : <span><input class="alarm-inputs" type="text"></span></h3>      NEXT STEPS: sensor far away to check the quality of my API-widget-->
+                        <!-- <h3>Temp: <span><input class="alarm-inputs" type="text"></span></h3> -->
+                    </div>
+                </div>
+            </div>
+    
+        </div> 
+
+        
+    </div>
+
+
+<div class="eco2">
+    <iframe  style="background: #21313C;border: none;border-radius: 2px;box-shadow: 0 2px 10px 0 rgba(70, 76, 79, .2);" width="640" height="480" src="https://charts.mongodb.com/charts-project-0-cpnpy/embed/charts?id=6298e6dc-0603-4de6-85ff-f47b0e7a5d8e&maxDataAge=10&theme=dark&autoRefresh=true"></iframe>
+</div>
+
+</section>
 
 
     

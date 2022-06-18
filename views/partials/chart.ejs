@@ -23,12 +23,12 @@
                 <div class="my-logo"><b>WorldBreath</b></div>
                     <div class="icon-bar ">
                 
-                        <a href="/home" class=""><i class="fa-solid fa-house"></i></a> 
-                        <a href="/dashboard"><i class="fa-solid fa-chart-simple"></i></a>
-                        <a href="/qrCode"><i class="fa-solid fa-qrcode"></i></a>
-                        <a href="/footprint"><i class="fa-solid fa-leaf"></i></a> 
-                        <a href="/profile" class="active"><i class="fa-solid fa-circle-user"></i></a>
-                        <a href="/logout" role="button"><i class="fa-solid fa-circle-user"></i></a> 
+                        <!-- <a href="/home" class=""><i class="fa-solid fa-house"></i></a>  -->
+                        <!-- <a href="/dashboard"><i class="fa-solid fa-chart-simple"></i></a> -->
+                        <!-- <a href="/qrCode"><i class="fa-solid fa-qrcode"></i></a> -->
+                        <!-- <a href="/footprint"><i class="fa-solid fa-leaf"></i></a>  -->
+                        <!-- <a href="/profile" class="active"><i class="fa-solid fa-circle-user"></i></a> -->
+                        <!-- <a href="/logout" role="button"><i class="fa-solid fa-circle-user"></i></a>  -->
  
                     </div>
             </div>    
@@ -43,8 +43,8 @@
 google.charts.load('current',{packages:['corechart']});
 google.charts.setOnLoadCallback(drawChart);
 
-var y = '<%=eCO2_ccs811%>';
-var x = '<%=date_ccs811%>';
+var y = '%=eCO2_ccs811%>'; (exw vgalei to brosta <)
+var x = '%=date_ccs811%>';
 y = Number(y);
 
 function drawChart() {
@@ -76,7 +76,7 @@ setInterval(function() {
 </script> -->
 
     
-<!-- CONTAINER FOR CHART -->
+<!-- CONTAINER FOR CHART
 <div id="chart_div" style="width:100%; max-width:600px; height:500px;padding-top: 15rem;"></div>
 <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
 <script>
@@ -87,8 +87,8 @@ setInterval(function() {
     // set callback function when api loaded
     google.charts.setOnLoadCallback(drawChart);
 
-    var y = '<%=eCO2_ccs811%>';
-    var x = '<%=date_ccs811%>';
+    var y = '%=eCO2_ccs811%>';
+    var x = '%=date_ccs811%>';
     y = Number(y);
 
     function drawChart() {
@@ -120,7 +120,7 @@ setInterval(function() {
                 data.addRow([index, y]);
                 chart.draw(data, options);
                 index++;
-            }, 250);
+            }, 250); -->
 }
     
     </script>

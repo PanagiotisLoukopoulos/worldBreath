@@ -313,10 +313,20 @@ app.post("/login",
     });
 });
 
+
 app.get("/home/setAlarm",function(req, res){
+  res.set(
+    'Cache-Control', 
+    'no-cache, private, no-store, must-revalidate, max-stal e=0, post-check=0, pre-check=0'
+);
+if(req.isAuthenticated()) {
   res.render("setAlarm",{active1: "active" ,active2: "",active3: "" ,
   active4: "",active5: "" ,active6: ""});
+}else {
+  res.redirect("/login");
+}
 });
+
 
 // alarm section (an ta stelnw allou, tote tha valw ti alert einai to ka8ena)
 app.post("/home/setAlarm",function(req,res){
@@ -336,41 +346,86 @@ app.post("/home/setAlarm",function(req,res){
 
 });
 
+
 app.get("/dashboard",function(req, res){
+  res.set(
+    'Cache-Control', 
+    'no-cache, private, no-store, must-revalidate, max-stal e=0, post-check=0, pre-check=0'
+);
+if(req.isAuthenticated()) {
   res.render("dashboard",{overall_air_quality_sgp30: overall_air_quality_sgp30,eCO2_ccs811: eCO2_ccs811,date_ccs811: date_ccs811,
     active1: "" ,active2: "active",active3: "" ,
         active4: "",active5: "" ,active6: "" });
+  }else {
+    res.redirect("/login");
+}
 });
 
+
 app.get("/dashboard/livingRoom",function (req,res) {
+  res.set(
+    'Cache-Control', 
+    'no-cache, private, no-store, must-revalidate, max-stal e=0, post-check=0, pre-check=0'
+);
+if(req.isAuthenticated()) {
   res.render("livingRoom",{
     eco2_sgp30:eco2_sgp30,
     tvoc_sgp30:tvoc_sgp30,
     humidity_bme688:humidity_bme688, 
     temperature_bme688:temperature_bme688,active1: "" ,active2: "active",active3: "" ,
-    active4: "",active5: "" ,active6: "", 
-  });  
+    active4: "",active5: "" ,active6: "", });
+    }else {
+    res.redirect("/login");
+}
 });
 
+
 app.get("/dashboard/fireplace",function (req,res) {
+  res.set(
+    'Cache-Control', 
+    'no-cache, private, no-store, must-revalidate, max-stal e=0, post-check=0, pre-check=0'
+);
+if(req.isAuthenticated()) {
   res.render("fireplace",{ 
     eCO2_ccs811: eCO2_ccs811,
     TVOC_ccs811:TVOC_ccs811,active1: "" ,active2: "active",active3: "" ,
     active4: "",active5: "" ,active6: "" 
-  });  
+  });
+}else {
+  res.redirect("/login");
+}  
 });
+
 
 app.get("/qrCode",function (req,res) {
+  res.set(
+    'Cache-Control', 
+    'no-cache, private, no-store, must-revalidate, max-stal e=0, post-check=0, pre-check=0'
+);
+if(req.isAuthenticated()) {
   res.render("qrCode",{active1: "" ,active2: "",active3: "active" ,
   active4: "",active5: "" ,active6: ""});
+}else {
+  res.redirect("/login");
+} 
 });
 
+
 app.get("/footprint",function (req,res) {
+  res.set(
+    'Cache-Control', 
+    'no-cache, private, no-store, must-revalidate, max-stal e=0, post-check=0, pre-check=0'
+);
+if(req.isAuthenticated()) {
   res.render("footprint",{etotalEmissions:etotalEmissions,
   periodOfConsumption: periodOfConsumption,total: total,
   active1: "" ,active2: "",active3: "" ,
   active4: "active",active5: "" ,active6: ""});
+}else {
+  res.redirect("/login");
+} 
 });
+
 
 app.post("/footprint",function(req,res){
   periodOfConsumption = req.body.period;
@@ -389,8 +444,13 @@ app.post("/footprint",function(req,res){
   res.redirect("/footprint");
 });
 
+
 app.get("/profile",function (req,res) {
-  res.render("profile",{date_ccs811: date_ccs811,eCO2_ccs811: eCO2_ccs811,
+  res.render("profile",{eco2_sgp30:eco2_sgp30,
+    tvoc_sgp30:tvoc_sgp30,
+    humidity_bme688:humidity_bme688, 
+    temperature_bme688:temperature_bme688,eCO2_ccs811: eCO2_ccs811,
+    TVOC_ccs811:TVOC_ccs811,
     active1: "" ,active2: "",active3: "" ,
     active4: "",active5: "active" ,active6: ""});
 });
