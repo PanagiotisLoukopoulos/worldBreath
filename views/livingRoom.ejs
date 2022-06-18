@@ -15,10 +15,10 @@
                 <h2>Living room</h2>
                 </div>
                 <div class="card-body">
-                <h3>CO2 : <span><input class="alarm-inputs" type="text"></span></h3> 
-                <h3>VOC : <span><input class="alarm-inputs" type="text"></span></h3>
-                <h3>Hum : <span><input class="alarm-inputs" type="text"></span></h3>
-                <h3>Temp: <span><input class="alarm-inputs" type="text"></span></h3>
+                <h3>CO2 : <span><%= eco2_sgp30 %></span> ppm</h3>  
+                <h3>VOC : <span><%= tvoc_sgp30 %></span> ppb</h3>
+                <h3>Hum : <span><%= humidity_bme688 %></span> %</h3>
+                <h3>Temp: <span><%= temperature_bme688 %></span> °C</h3>
                 <!-- <p class="invisible">invisible text</p> -->
                 </div>
             </div>

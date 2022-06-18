@@ -7,7 +7,6 @@ import passport from 'passport';
 import passportLocalMongoose from 'passport-local-mongoose';
 import {MongoClient} from 'mongodb';
 dotenv.config();
-
 const app = express();
 
 app.set('view engine', 'ejs');
@@ -17,47 +16,172 @@ app.use(express.static("public"));
 
 const url = process.env.MONGODB_URI;
 
-// sundesh me vash kai lhpsh data gia dashboards kai alarms//
+// bme688 values to send at ui
+let temperature_bme688 = 0;
+let pressure_bme688 = 0;
+let humidity_bme688 = 0;
+let gas_bme688= 0;
+//ccs811 values to send at ui
+let eCO2_ccs811=0;
+let TVOC_ccs811=0;
+let date_ccs811;
 
-// const database = client.db('worldBreath');
-// const dataBme688 = database.collection('bme688');
-// const data = dataBme688.find();
-// console.log(data);
+//sgp30 values to send at ui
+let tvoc_sgp30=0;
+let eco2_sgp30=0;
+let overall_air_quality_sgp30;
+
+//........................................total eco2 from fireplace (every 1 min update value)...................................//
+
+let total = 0;
 
 MongoClient.connect(url, function(err, db) {
   if (err) throw err;
   let dbo = db.db("worldBreath");
-  //Find all documents in the bme688 collection:
-  // dbo.collection("bme688").find({}).toArray(function(err, result) {
-  //   if (err) throw err;
-  //   console.log(result);
-  //   db.close();
-  // });
-  //  projection: { _id: 0, payload: 1}
-  dbo.collection("bme688").find({}, { sort: { timestamp: -1 }, limit: 2 }).toArray(function(err, result) {
-    if (err) throw err;
-    //console.log(result);
-    for (const el of result) {
-      // console.log(el.payload.temperature);
-    }
-    
-  });
-
-  dbo.collection("ccs811").find({}, { sort: { timestamp: -1 }, limit: 2 }).toArray(function(err, result) {
-    if (err) throw err;
-    //console.log(result);
-    for (const el of result) {
-      console.log(el.payload.eCO2,el.payload.TVOC);
-    }
-    db.close();
-  });
+  
+  setInterval(function() {
+    dbo.collection("ccs811").find({}).toArray(function(err, result) {
+      total = 0;
+      if (err) throw err;
+      //console.log(result);
+      for (const el of result) {
+       // console.log(typeof(el.payload.tvoc));
+        total = total + el.payload.eCO2;
+      }
+      console.log(total);
+      
+      //db.close();
+    });
+}, 60000);
+ 
 });
 
-let totalEmissions;
-let periodOfConsumption;
-// sundesh me vash kai lhpsh data gia dashboards kai alarms//
+//................................Change streams FOR collections bme688,ccs811,sgp30 ...................................//
+async function main() {
+    
+  /**
+   * The Mongo Client you will use to interact with your database
+   * See https://mongodb.github.io/node-mongodb-native/3.6/api/MongoClient.html for more details
+   * In case: '[MONGODB DRIVER] Warning: Current Server Discovery and Monitoring engine is deprecated...'
+   * pass option { useUnifiedTopology: true } to the MongoClient constructor.
+   * const client =  new MongoClient(uri, {useUnifiedTopology: true})
+   */
+  const client = new MongoClient(url, {useUnifiedTopology: true});
 
-// user authentication 
+  try {
+      // Connect to the MongoDB cluster
+      await client.connect();
+
+      // upologismos me aggregate apo Atlas
+      //await averageCo2(client);
+
+      // Make the appropriate DB calls
+      await monitorBme688(client);
+      await monitorSgp30(client);
+      await monitorCcs811(client);
+  }catch(error){
+    console.log(error);
+  }
+}
+
+main().catch(console.error);
+
+// //............................................//
+// // !!! change stream for collection bme688 !!!//
+// //............................................//
+async function monitorBme688(client, pipeline = []) {
+  const collection = client.db("worldBreath").collection("bme688");
+  const changeStream = collection.watch(pipeline);
+  // ChangeStream inherits from the Node Built-in Class EventEmitter (https://nodejs.org/dist/latest-v12.x/docs/api/events.html#events_class_eventemitter).
+  // We can use EventEmitter's on() to add a listener function that will be called whenever a change occurs in the change stream.
+  // See https://nodejs.org/dist/latest-v12.x/docs/api/events.html#events_emitter_on_eventname_listener for the on() docs.
+  changeStream.on('change', (next) => {
+      console.log(next);
+      temperature_bme688 = next.fullDocument.temperature;
+      pressure_bme688 = next.fullDocument.pressure;
+      humidity_bme688 = next.fullDocument.humidity;
+      gas_bme688 = next.fullDocument.gas;
+  });
+  // Wait the given amount of time and then close the change stream
+  //await closeChangeStream(timeInMs, changeStream);
+}
+
+// //.............OUTDOOR SENSOR...................//
+// // !!! change stream for collection CCS811 !!!//
+// //............................................//
+
+async function monitorCcs811(client, pipeline = []) {
+  const collection = client.db("worldBreath").collection("ccs811");
+  const changeStream = collection.watch(pipeline);
+  
+  changeStream.on('change', (next) => {
+      console.log(next);
+      eCO2_ccs811 = next.fullDocument.payload.eCO2;
+      TVOC_ccs811 = next.fullDocument.payload.TVOC;
+      date_ccs811 = next.fullDocument.payload.date;
+  });
+}
+
+// //............................................//
+// // !!! change stream for collection SGP30 !!! //
+// //............................................//
+
+async function monitorSgp30(client, pipeline = []) {
+  const collection = client.db("worldBreath").collection("sgp30");
+  const changeStream = collection.watch(pipeline);
+  
+  changeStream.on('change', (next) => {
+      console.log(next);
+      tvoc_sgp30 = next.fullDocument.payload.tvoc;
+      eco2_sgp30 = next.fullDocument.payload.eco2;
+      overall_air_quality_sgp30 = next.fullDocument.payload.overall_air_quality;
+      switch (overall_air_quality_sgp30) {
+        case 1:
+          overall_air_quality_sgp30 = "Excellent";
+          break;
+        case 2:
+          overall_air_quality_sgp30 = "Good";
+          break;
+        case 3:
+          overall_air_quality_sgp30 = "Moderate";
+          break;
+        case 4:
+          overall_air_quality_sgp30 = "Poor";
+          break;
+        case 5:
+          overall_air_quality_sgp30 = "Unhealthy";  
+          break
+      } 
+  });
+}
+
+// mou vgazei undefined ????? (Atlas aggregate sum)
+
+// async function averageCo2(client) {
+//   const pipeline = [
+//     {
+//       '$group': {
+//         '_id': null, 
+//         'fieldN': {
+//           '$sum': '$value'
+//         }
+//       }
+//     }
+//   ]
+//   const aggCursor = client.db("worldBreath").collection("ccs811").aggregate(pipeline);
+//   console.log(aggCursor.total);
+// }
+
+
+let etotalEmissions;
+//let totalFootprint = etotalEmissions  + total;
+// setInterval(function (params) {
+//   console.log("total emission p: " + totalFootprint);
+
+// },2000);
+let periodOfConsumption;
+
+// user authentication PASSPORT
 app.use(session({
   secret: process.env.SECRET,
   resave: false,
@@ -67,9 +191,31 @@ app.use(session({
 app.use(passport.initialize())
 app.use(passport.session());
 
+
+//...... user authentication, h mongo xrhsimopoiei to userSchema protou kanei to connection me thn DB ara 8elw async kai buffer->false?.....................//
+
+mongoose.set('bufferCommands', false);
+const UserUri = process.env.ATLAS_URI; 
+const connectUser = () => {
+  return mongoose.connect(UserUri, { useNewUrlParser: true, useUnifiedTopology: true })
+    .then(() => {
+      console.log(('DB connection successful'));
+      return 'Success';
+    })
+    .catch ((reason) =>  {
+      console.log(('Unable to connect to the mongodb instance. Error: '), reason);
+      return 'FAIL';
+    })
+};
+connectUser().catch(console.error);
+//mongoose.set('bufferTimeoutMS', 20000);
+
+
 //const uri = process.env.ATLAS_URI;
-const uri = process.env.ATLAS_URI;
-mongoose.connect(uri)
+// const uri = process.env.ATLAS_URI;
+// mongoose.connect(uri, {
+//   serverSelectionTimeoutMS: 50000 // Timeout after  30s
+// })
 
 const userSchema = new mongoose.Schema({
   email: String,
@@ -84,14 +230,13 @@ passport.use(User.createStrategy());
 
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
-// user authentication//
+
+//................................................ user authentication.........................................//
 
 
 
 
-
-
-
+//..............................................ROUTES SECTION......................................................//
 
 app.get("/",function(req,res) {
   res.render("worldBreath");
@@ -106,24 +251,28 @@ app.get("/register", function(req, res){
 });
 
 app.get("/home", function(req,res) {
-  // The below line was added so we can't display the "/secrets" page
+  // The below line was added so we can't display the app pages
   // after we logged out using the "back" button of the browser, which
   // would normally display the browser cache and thus expose the 
-  // "/secrets" page we want to protect. Code taken from this post.
+  // "app pages" we want to protect. 
   res.set(
       'Cache-Control', 
       'no-cache, private, no-store, must-revalidate, max-stal e=0, post-check=0, pre-check=0'
   );
   if(req.isAuthenticated()) {
-      res.render("home",{temp: 25});        
+      res.render("home",{
+        overall_air_quality_sgp30: overall_air_quality_sgp30, 
+        temperature_bme688:temperature_bme688,
+        humidity_bme688:humidity_bme688, 
+        eCO2_ccs811: eCO2_ccs811,
+        TVOC_ccs811:TVOC_ccs811,
+        active1: "active" ,active2: "",active3: "" ,
+        active4: "",active5: "" ,active6: ""
+      });        
   } else {
       res.redirect("/login");
   }
 });
-
-// app.get("/home",function(req, res){
-//   res.render("home",{temp: 25});
-// });
 
 app.get("/logout",(req,res)=>{
   req.logout((err)=>{
@@ -142,7 +291,7 @@ app.post("/register", function (req,res) {
           res.redirect("/register");
       }else{
           passport.authenticate("local")(req,res, function () {
-              res.redirect("/home"); //isws ton stelnw sto login
+              res.redirect("/login"); 
           })
       }
   })
@@ -165,28 +314,62 @@ app.post("/login",
 });
 
 app.get("/home/setAlarm",function(req, res){
-  res.render("setAlarm");
+  res.render("setAlarm",{active1: "active" ,active2: "",active3: "" ,
+  active4: "",active5: "" ,active6: ""});
+});
+
+// alarm section (an ta stelnw allou, tote tha valw ti alert einai to ka8ena)
+app.post("/home/setAlarm",function(req,res){
+  //indoor sensor-values/alarms
+  let CO2Alarm = req.body.CO2Alarm;
+  let VOCAlarm = req.body.VOCAlarm;
+  let HumAlarm = req.body.HumAlarm;
+  let TempAlarm = req.body.TempAlarm;
+  //outdoor sensor-values/alarms
+  let Co2OutdoorAlarm = req.body.Co2OutdoorAlarm;
+  let VOCOutdoorAlarm = req.body.VOCOutdoorAlarm;
+  if (Co2OutdoorAlarm < eCO2_ccs811 ||VOCOutdoorAlarm<TVOC_ccs811 ||CO2Alarm < eco2_sgp30 || VOCAlarm < tvoc_sgp30 || HumAlarm< humidity_bme688 || TempAlarm < temperature_bme688)  {
+    res.send(`alert ON` );
+  }else{
+  res.redirect("/home");
+  }
+
 });
 
 app.get("/dashboard",function(req, res){
-  res.render("dashboard");
+  res.render("dashboard",{overall_air_quality_sgp30: overall_air_quality_sgp30,eCO2_ccs811: eCO2_ccs811,date_ccs811: date_ccs811,
+    active1: "" ,active2: "active",active3: "" ,
+        active4: "",active5: "" ,active6: "" });
 });
 
 app.get("/dashboard/livingRoom",function (req,res) {
-  res.render("livingRoom");  
+  res.render("livingRoom",{
+    eco2_sgp30:eco2_sgp30,
+    tvoc_sgp30:tvoc_sgp30,
+    humidity_bme688:humidity_bme688, 
+    temperature_bme688:temperature_bme688,active1: "" ,active2: "active",active3: "" ,
+    active4: "",active5: "" ,active6: "", 
+  });  
 });
 
 app.get("/dashboard/fireplace",function (req,res) {
-  res.render("fireplace");  
+  res.render("fireplace",{ 
+    eCO2_ccs811: eCO2_ccs811,
+    TVOC_ccs811:TVOC_ccs811,active1: "" ,active2: "active",active3: "" ,
+    active4: "",active5: "" ,active6: "" 
+  });  
 });
 
 app.get("/qrCode",function (req,res) {
-  res.render("qrCode");
+  res.render("qrCode",{active1: "" ,active2: "",active3: "active" ,
+  active4: "",active5: "" ,active6: ""});
 });
 
 app.get("/footprint",function (req,res) {
-  res.render("footprint",{totalEmissions:totalEmissions,
-  periodOfConsumption: periodOfConsumption});
+  res.render("footprint",{etotalEmissions:etotalEmissions,
+  periodOfConsumption: periodOfConsumption,total: total,
+  active1: "" ,active2: "",active3: "" ,
+  active4: "active",active5: "" ,active6: ""});
 });
 
 app.post("/footprint",function(req,res){
@@ -198,20 +381,18 @@ app.post("/footprint",function(req,res){
   //UK CO2(eq) emissions due to electricity generation
     const CO2ePerkWh = 0.23314; //kg CO2e per kWh
     const electricityEmissions = electricityConsumption * CO2ePerkWh;
-    const emissionsFireplace = 1000;
+    //const emissionsFireplace = 1000;
 
-    let etotalEmissions = electricityEmissions + emissionsFireplace;
-    totalEmissions = etotalEmissions;
+    etotalEmissions = electricityEmissions;
+    //totalEmissions = etotalEmissions;
 
   res.redirect("/footprint");
 });
 
-
-
-
-
 app.get("/profile",function (req,res) {
-  res.render("profile");
+  res.render("profile",{date_ccs811: date_ccs811,eCO2_ccs811: eCO2_ccs811,
+    active1: "" ,active2: "",active3: "" ,
+    active4: "",active5: "active" ,active6: ""});
 });
 
 
@@ -220,5 +401,5 @@ let port = process.env.PORT;
 if (port == null || port == "") {
   port = 3000;
 }
-// const server =
- app.listen(port, () => { console.log("Περιμένω αιτήματα στο port ") });
+
+app.listen(port, () => { console.log(`Server is started at port ${port}` ) });

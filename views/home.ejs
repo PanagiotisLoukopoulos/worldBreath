@@ -24,9 +24,9 @@
                 <h2>Indoor System</h2>
                 </div>
                 <div class="card-body">
-                <h3>Status: Healthy</h3>
-                <p>Temperature: <span><%= temp %> </span> </p>
-                <p>Humidity: <span></span></p>
+                <h3>Overall Air Quality: <span><%= overall_air_quality_sgp30 %> </span> </h3>
+                <h3>Temperature: <span><%= temperature_bme688 %> </span> °C </h3>
+                <h3>Humidity: <span> <%= humidity_bme688 %></span> %</h3>
                 <p class="invisible">invisible text</p>
                 </div>
             </div>
@@ -39,10 +39,12 @@
                 <h2>Outdoor System</h2>
                 </div>
                 <div class="card-body">
-                    <h3>Status: Healthy</h3>  <!--isws valw to status na vgainei me vash to AQI kai to AQI na fygei -->
-                    <p>AQI : </p>
-                    <p>Temp: <span></span> </p>
-                    <p>Hum : <span></span></p>
+                    <!-- <h3>Status: Healthy</h3>  isws valw to status na vgainei me vash to AQI kai to AQI na fygei -->
+                    <h3>eCo2: <span><%= eCO2_ccs811 %></span> ppm</h3>
+                    <h3>TVOC : <span><%= TVOC_ccs811 %></span> ppb</h3>
+                    <p class="invisible">invisible text</p>
+                    <p class="invisible">invisible text</p>
+                    
                 </div>
             </div>
         </div>
@@ -56,7 +58,7 @@
         </div> -->
 
             <div class="d-grid gap-2 d-sm-block">
-                <a href="/home/setAlarm"><button class="set-alarm-btn btn btn-outline-success btn-lg" type="button">Set alarm</button></a>
+                <a href="/home/setAlarm"><button class="set-alarm-btn btn btn-outline-success btn-lg" type="button">Fast check</button></a>
             </div>
 
     </div> 

@@ -17,7 +17,7 @@
                 <h2>Living room</h2>
                 </div>
                 <div class="card-body">
-                <h3>Status: Healthy</h3>
+                <h3>Status: <span><%= overall_air_quality_sgp30 %></h3>
                 <div class="d-grid gap-2 d-sm-block">
                     <a href="/dashboard/livingRoom"><button class="set-alarm-btn btn btn-outline-success btn-lg" type="button">more info</button></a>
                 </div>
@@ -52,6 +52,52 @@
     </div> 
 
 </section>
+<div id="chart_div" style="width:100%; max-width:600px; height:500px;padding-top: 0rem;"></div>
+<script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+<script>
+    // load current chart package
+    google.charts.load("current", {
+        packages: ["corechart", "line"]
+    });
+    // set callback function when api loaded
+    google.charts.setOnLoadCallback(drawChart);
 
+    var y = '<%=eCO2_ccs811%>';
+    var x = '<%=date_ccs811%>';
+    y = Number(y);
+
+    function drawChart() {
+        // create data object with default value
+        let data = google.visualization.arrayToDataTable([
+            ["Year", "Co2"],
+            [0, 0]
+        ]);
+        // create options object with titles, colors, etc.
+        let options = {
+            title: "CO2 emissions",
+            hAxis: {
+                title: "Time"
+            },
+            vAxis: {
+                title: "CO2"
+            }
+        };
+        // draw chart on load
+        let chart = new google.visualization.LineChart(
+            document.getElementById("chart_div")
+        );
+        chart.draw(data, options);
+        // interval for adding new data every 250ms
+        let index = 0;
+            setInterval(function() {
+                // instead of this random, you can make an ajax call for the current cpu usage or what ever data you want to display
+                
+                data.addRow([index, y]);
+                chart.draw(data, options);
+                index++;
+            }, 250);
+}
+    
+    </script>
 
 <%- include("partials/footer") %> 

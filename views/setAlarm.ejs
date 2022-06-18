@@ -16,11 +16,17 @@
                 <h2>Indoor Alarm</h2>
                 </div>
                 <div class="card-body">
-                <h3>CO2 : <span><input class="alarm-inputs" type="text"></span></h3> 
-                <h3>VOC : <span><input class="alarm-inputs" type="text"></span></h3>
-                <h3>Hum : <span><input class="alarm-inputs" type="text"></span></h3>
-                <h3>Temp: <span><input class="alarm-inputs" type="text"></span></h3>
-                <!-- <p class="invisible">invisible text</p> -->
+
+            <form action="/home/setAlarm" method="POST">    
+
+                <h3>CO2  : <span><input class="alarm-inputs" type="number" name="CO2Alarm"></span></h3> 
+                <h3>VOC  : <span><input class="alarm-inputs" type="number" name="VOCAlarm"></span></h3>
+                <h3>Hum  : <span><input class="alarm-inputs" type="number" name="HumAlarm"></span></h3>
+                <h3>Temp : <span><input class="alarm-inputs" type="number" name="TempAlarm"></span></h3>
+                <div class="d-grid gap-2 d-sm-block">
+                    <button class="set-alarm-btn btn btn-outline-success btn-lg" type="submit">Check</button>
+                </div>
+                </form>
                 </div>
             </div>
         </div>
@@ -32,10 +38,15 @@
                 <h2>Outdoor Alarm</h2>
                 </div>
                 <div class="card-body">
-                    <h3>CO2 : <span><input class="alarm-inputs" type="text"></span></h3>  <!--isws valw to status na vgainei me vash to AQI kai to AQI na fygei -->
-                    <h3>AQI : <span><input class="alarm-inputs" type="text"></span></h3>
-                    <h3>VOC : <span><input class="alarm-inputs" type="text"></span></h3>
-                    <h3>Temp: <span><input class="alarm-inputs" type="text"></span></h3>
+                <form action="/home/setAlarm" method="POST">
+                    <h3>CO2 : <span><input class="alarm-inputs" type="number" name="Co2OutdoorAlarm"></span></h3>  <!--isws valw to status na vgainei me vash to AQI kai to AQI na fygei -->
+                    <h3>VOC : <span><input class="alarm-inputs" type="number" name="VOCOutdoorAlarm"></span></h3>
+                    <h3 class="invisible"><span><input class="alarm-inputs" type="text"></span>invisible text</h3>
+                    <h3 class="invisible"><span><input class="alarm-inputs" type="text"></span>invisible text</h3>
+                    <div class="d-grid gap-2 d-sm-block">
+                        <button class="set-alarm-btn btn btn-outline-success btn-lg" type="submit">Check</button>
+                    </div>
+                </form>
                 </div>
             </div>
         </div>
@@ -44,9 +55,9 @@
             <a class="set-alarm-btn btn btn-primary btn-lg" href="#" role="button">Set alarm</a>
         </div> -->
 
-        <div class="d-grid gap-2 d-sm-block">
+        <!-- <div class="d-grid gap-2 d-sm-block">
             <button class="set-alarm-btn btn btn-outline-success btn-lg" type="button">Add alarm</button>
-        </div>
+        </div> -->
 
     </div>
         
