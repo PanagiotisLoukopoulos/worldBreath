@@ -331,14 +331,15 @@ if(req.isAuthenticated()) {
 // alarm section (an ta stelnw allou, tote tha valw ti alert einai to ka8ena)
 app.post("/home/setAlarm",function(req,res){
   //indoor sensor-values/alarms
-  let CO2Alarm = req.body.CO2Alarm;
-  let VOCAlarm = req.body.VOCAlarm;
-  let HumAlarm = req.body.HumAlarm;
-  let TempAlarm = req.body.TempAlarm;
+  let CO2Alarm = Number(req.body.CO2Alarm);
+  let VOCAlarm = Number(req.body.VOCAlarm);
+  let HumAlarm = Number(req.body.HumAlarm);
+  let TempAlarm = Number(req.body.TempAlarm);
   //outdoor sensor-values/alarms
-  let Co2OutdoorAlarm = req.body.Co2OutdoorAlarm;
-  let VOCOutdoorAlarm = req.body.VOCOutdoorAlarm;
-  if (Co2OutdoorAlarm < eCO2_ccs811 ||VOCOutdoorAlarm<TVOC_ccs811 ||CO2Alarm < eco2_sgp30 || VOCAlarm < tvoc_sgp30 || HumAlarm< humidity_bme688 || TempAlarm < temperature_bme688)  {
+  let Co2OutdoorAlarm = Number(req.body.Co2OutdoorAlarm);
+  let VOCOutdoorAlarm = Number(req.body.VOCOutdoorAlarm);
+  //console.log(typeof(CO2Alarm));
+  if (Co2OutdoorAlarm <= eCO2_ccs811 ||VOCOutdoorAlarm<=TVOC_ccs811 ||CO2Alarm <= eco2_sgp30 || VOCAlarm <= tvoc_sgp30 || HumAlarm<= humidity_bme688 || TempAlarm <= temperature_bme688 )  {
     res.send(`alert ON` );
   }else{
   res.redirect("/home");
